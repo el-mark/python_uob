@@ -2,11 +2,9 @@ def caesar_cipher_encryption(raw_text, shift):
     new_text = ""
     for character in raw_text:
         ascii_ord = ord(character) + shift
-        if ascii_ord < ord("z"):
+        if ascii_ord <= ord("z"):
             new_text += chr(ascii_ord)
         else:
-            print(ascii_ord)
-            print(ascii_ord - 122)
             readjust_distance = ord("z") - ord("a") + 1
             new_text += chr(ascii_ord - readjust_distance)
     return new_text
