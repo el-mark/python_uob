@@ -1,0 +1,12 @@
+Pasta;Flour,Egg;Mix flour and egg,Knead dough,Cook in boiling water;10 minutes
+Brownie;Cocoa powder,Flour,Sugar,Egg;Mix all ingredients,Bake in oven,Let it cool;45 minutes
+Pancake;Flour,Egg,Milk;Mix flour, egg, and milk,Cook on skillet,Flip and cook other side;15 minutes
+Guacamole;Avocado, salt, tomato and pepper;mix all ingredients;10
+LOGS
+Added recipe Pasta
+Added recipe Brownie
+Added recipe Pancake
+Added recipe Curry
+Deleted recipe Curry
+Added recipe Guacamole
+Edited recipe Guacamole
