@@ -1,2 +1,4 @@
 # python_uob
-All the code done in during first the Masters Degree
+Some of the code done in during first the Masters Degree.
+Exercises and practice only.
+
