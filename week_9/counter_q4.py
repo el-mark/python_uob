@@ -76,8 +76,8 @@ print(f'A: {A.getCount()}')
 
 A.update(-65)
 print(f'A: {A.getCount()}')
-# 917
+# 34
 
 A.update(+18)
 print(f'A: {A.getCount()}')
-# 917
+# 11
