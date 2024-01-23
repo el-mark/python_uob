@@ -19,3 +19,15 @@ def home():
 @app.route('/header')
 def header():
     return render_template('header.html', abbreviations=app.globals_abbreviations[0:10])
+
+@app.route('/search/<search_text>')
+def search(search_text):
+    abbreviations = app.globals_abbreviations
+    filtered_abbreviations = []
+    for abbreviation in abbreviations:
+        if len(filtered_abbreviations) > 10:
+            break
+        if abbreviation[0].startswith(search_text):
+            filtered_abbreviations.append(abbreviation)
+
+    return render_template('search.html', abbreviations = filtered_abbreviations)
