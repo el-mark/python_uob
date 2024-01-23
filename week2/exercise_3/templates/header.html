@@ -1,0 +1,14 @@
+<h1>Abbreviation</h1>
+<table>
+    {% for abbreviation in abbreviations %}
+        <tr>
+            <td>
+                <strong>{{ abbreviation[0] }}</strong>
+            </td>
+            <td>
+                {{ abbreviation[1] }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+    
