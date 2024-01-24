@@ -2,7 +2,7 @@
 {% block content %}
     <p>{{ variable_a }}</p>
     <img src="{{ url_for('static', filename='mega-tutorial.png') }}" alt="mega-tutorial">
-    <p>Quotes</p>
+    <p class="blue-font">Quotes</p>
     <ol>
         {% for quote in quotes %}
             <li>{{ quote }} </li>

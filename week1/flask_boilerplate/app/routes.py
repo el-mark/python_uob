@@ -9,7 +9,7 @@ with app.open_resource('data/quotes.txt') as file:
 
 @app.route('/')
 def home():
-    return 'hello world'
+    return render_template('home.html')
 
 @app.route('/template_a')
 def template_a():
