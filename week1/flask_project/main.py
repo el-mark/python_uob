@@ -2,6 +2,27 @@ from flask import Flask, request
 import datetime
 import random
 
+
+from math import isqrt
+def is_prime(n):
+    if n <= 3:
+        return n > 1
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    limit = isqrt(n)
+    for i in range(5, limit+1, 6):
+        if n % i == 0 or n % (i+2) == 0:
+            return False
+    return True
+
+def prime_divisors(number):
+    divisors = []
+    for i in range(2, number):
+        if number % i == 0 and is_prime(i):
+            divisors.append(i)
+    return divisors
+
+
 def get_quotes_array():
     quotes_file = open('quotes.txt', 'r')
     quotes = []
@@ -30,3 +51,8 @@ def random_quote():
 def quote(number):
     quotes = get_quotes_array()
     return quotes[int(number)]
+
+@app.route('/prime/<number>')
+def prime(number):
+    divisors = prime_divisors(int(number))
+    return str(divisors)
