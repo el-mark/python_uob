@@ -1,14 +1,17 @@
-<h1>Filtered Abbreviations</h1>
-<table>
-    {% for abbreviation in abbreviations %}
-        <tr>
-            <td>
-                <strong>{{ abbreviation[0] }}</strong>
-            </td>
-            <td>
-                {{ abbreviation[1] }}
-            </td>
-        </tr>
-    {% endfor %}
-</table>
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Filtered Abbreviations</h1>
+    <table>
+        {% for abbreviation in abbreviations %}
+            <tr>
+                <td>
+                    <strong>{{ abbreviation[0] }}</strong>
+                </td>
+                <td>
+                    {{ abbreviation[1] }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}
     

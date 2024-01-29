@@ -14,7 +14,7 @@ with app.open_resource('data/en-abbreviations.txt') as file:
 
 @app.route('/')
 def home():
-    return 'home'
+    return render_template('home.html')
 
 @app.route('/header')
 def header():
