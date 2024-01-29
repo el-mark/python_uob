@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <p>request</p>
+    <p>method: {{ request.method }}</p>
+    <p>user_agent: {{ request.headers.get('User-Agent') }}</p>
+    <p>{{ request.__dict__ }}</p>
+
+    <p>app</p>
+    <p>{{ app.__dict__ }}</p>
+{% endblock content %}

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import datetime
 import random
 
@@ -34,13 +34,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return "Hello World!"
+    return render_template('hello_world.html')
+
+@app.route('/app_object')
+def app_object():
+    return render_template('app_object.html', app=app, request=request)
 
 @app.route('/now')
 def date_time():
     date_and_time = datetime.datetime.now()
 
-    return date_and_time.strftime("%c")
+    return render_template('date_time.html', date_and_time=date_and_time)
 
 @app.route('/random_quote')
 def random_quote():
