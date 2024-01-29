@@ -14,6 +14,15 @@ with app.open_resource('data/en-abbreviations.txt') as file:
     app.globals_abbreviations = abbreviations
 
 
+def search_abbreviations(text_search):
+    abbreviations_found = []
+    for abbreviation in app.globals_abbreviations:
+        if abbreviation[0].startswith(text_search):
+            # print(abbreviation)
+            abbreviations_found.append(abbreviation)
+
+    return abbreviations_found
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -25,11 +34,13 @@ def header():
 @app.route('/search', methods=['GET', 'POST'])
 def search_bar():
     form = SearchForm()
+    abbreviations = []
+    searched = form.search.data
     if form.validate_on_submit():
-        a = 'asdf'
+        abbreviations = search_abbreviations(searched)
+        # abbreviations = app.globals_abbreviations[0:10]
 
-    abbreviations = app.globals_abbreviations[0:10]
-    return render_template('search_bar.html', abbreviations=abbreviations, form=form)
+    return render_template('search_bar.html', abbreviations=abbreviations, form=form, searched = searched)
 
 
 @app.route('/search/<search_text>')

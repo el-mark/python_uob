@@ -7,17 +7,24 @@
         <div>{{ form.submit() }}</div>
     </form>
 
-    <h1>You searched: "A"</h1>
-    <table>
-        {% for abbreviation in abbreviations %}
-            <tr>
-                <td>
-                    <strong>{{ abbreviation[0] }}</strong>
-                </td>
-                <td>
-                    {{ abbreviation[1] }}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% if abbreviations %}
+        <h1>You searched: {{ searched }}</h1>
+        <table>
+            {% for abbreviation in abbreviations %}
+                <tr>
+                    <td>
+                        <strong>{{ abbreviation[0] }}</strong>
+                    </td>
+                    <td>
+                        {{ abbreviation[1] }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if searched and not abbreviations %}
+        <p>No abbreviations found</p>
+    {% endif %}
+
 {% endblock content %}
