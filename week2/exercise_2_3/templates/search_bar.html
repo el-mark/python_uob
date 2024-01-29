@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+    
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div>{{ form.search.label }}<br/>{{ form.search(size=30) }}</div>
+        <div>{{ form.submit() }}</div>
+    </form>
+
+    <h1>You searched: "A"</h1>
+    <table>
+        {% for abbreviation in abbreviations %}
+            <tr>
+                <td>
+                    <strong>{{ abbreviation[0] }}</strong>
+                </td>
+                <td>
+                    {{ abbreviation[1] }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

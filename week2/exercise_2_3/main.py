@@ -1,6 +1,8 @@
 from flask import Flask, render_template
+from forms import SearchForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY']= b'rty%#$ui56789'
 
 with app.open_resource('data/en-abbreviations.txt') as file:
     abbreviations = []
@@ -20,6 +22,16 @@ def home():
 def header():
     return render_template('header.html', abbreviations=app.globals_abbreviations[0:10])
 
+@app.route('/search', methods=['GET', 'POST'])
+def search_bar():
+    form = SearchForm()
+    if form.validate_on_submit():
+        a = 'asdf'
+
+    abbreviations = app.globals_abbreviations[0:10]
+    return render_template('search_bar.html', abbreviations=abbreviations, form=form)
+
+
 @app.route('/search/<search_text>')
 def search(search_text):
     abbreviations = app.globals_abbreviations
@@ -31,3 +43,4 @@ def search(search_text):
             filtered_abbreviations.append(abbreviation)
 
     return render_template('search.html', abbreviations = filtered_abbreviations)
+
