@@ -1,8 +1,20 @@
+from datetime import date, timedelta
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DateField, EmailField, IntegerField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, ValidationError
 
 class SignUpForm(FlaskForm):
+    def check_date_of_birth(form, field):
+        print(field.data)
+        today_date = date.today()
+        print(today_date)
+        date_100_years_ago = today_date - timedelta(days=365 * 100)
+        if field.data > today_date:
+            raise ValidationError('The Date of birth must be a past date')
+        
+        if field.data < date_100_years_ago:
+            raise ValidationError('The Date of birth must be less than 100 years ago')
+
     user_name = StringField(
         'User Name:', validators=[DataRequired(message='Please enter your Name')]
     )
@@ -17,7 +29,7 @@ class SignUpForm(FlaskForm):
     )
 
     date_of_birth = DateField(
-        'date_of_birth:', validators=[DataRequired(message='Please enter your Date of birth')]
+        'date_of_birth:', validators=[DataRequired(message='Please enter your Date of birth'), check_date_of_birth]
     )
     telephone = StringField(
         'Telephone:', validators=[DataRequired(message='Please enter your Telephone')]
@@ -26,10 +38,10 @@ class SignUpForm(FlaskForm):
         'Address:', validators=[DataRequired(message='Please enter your Address')]
     )
     height = IntegerField(
-        'height:', validators=[DataRequired(message='Please enter your height')]
+        'Height (cm):', validators=[DataRequired(message='Please enter your height'), NumberRange(min=90, max=300, message='Height must be between %(min)d and %(max)d centimeters')]
     )
     width = IntegerField(
-        'Width:', validators=[DataRequired(message='Please enter your Width')]
+        'Width (cm):', validators=[DataRequired(message='Please enter your Width')]
     )
 
     submit = SubmitField('Save', validators=[DataRequired()])
