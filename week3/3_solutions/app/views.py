@@ -14,10 +14,22 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/template_a')
-def template_a():
-    variable_a = 'Variable A'
-    return render_template('template_a.html', title='Template A', variable_a=variable_a, quotes=app.globals_quotes)
+@app.route('/cs_qualify/<grades_raw>')
+def cs_qualify(grades_raw):
+    qualification = 'Approved'
+
+    grades =  grades_raw.split(',')
+    counter = 0
+    for grade in grades:
+        if grade == 'a':
+            counter += 1
+    
+    if counter == 3:
+        qualification = 'Approved'
+    else:
+        qualification = 'Not Approved'
+
+    return render_template('cs_qualify.html', title='Qualification', qualification=qualification, grades=grades)
 
 
 @app.route('/register', methods=['GET', 'POST'])

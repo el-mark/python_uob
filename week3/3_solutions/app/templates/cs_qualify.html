@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <p>{{ qualification }}</p>
+    <p class="blue-font">Grades:</p>
+    <ol>
+        {% for grade in grades %}
+            <li>{{ grade }} </li>
+        {% endfor %}
+    </ol>
+{% endblock content %}
