@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Check Qualifications</h1>
+
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.first_subject.label }}<br/>{{ form.first_subject }}<br/>
+            {% for error in form.first_subject.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.first_grade.label }}<br/>{{ form.first_grade }}<br/>
+            {% for error in form.first_grade.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <br>
+
+        <div>
+            {{ form.second_subject.label }}<br/>{{ form.second_subject }}<br/>
+            {% for error in form.second_subject.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.second_grade.label }}<br/>{{ form.second_grade }}<br/>
+            {% for error in form.second_grade.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <br>
+
+        <div>
+            {{ form.third_subject.label }}<br/>{{ form.third_subject }}<br/>
+            {% for error in form.third_subject.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.third_grade.label }}<br/>{{ form.third_grade }}<br/>
+            {% for error in form.third_grade.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <br>
+        <div>{{ form.submit() }}</div>
+        <br>
+    </form>
+{% endblock content %}

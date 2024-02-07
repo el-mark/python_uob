@@ -1,7 +1,28 @@
 from datetime import date, timedelta
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, DateField, EmailField, IntegerField
+from wtforms import StringField, SubmitField, PasswordField, DateField, EmailField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange, ValidationError
+
+class QualifyFrom(FlaskForm):
+    subjects = [
+        ('1', 'Math'),
+        ('2', 'Biology'),
+        ('3', 'History')
+    ]
+    first_subject = SelectField('First Subject', choices=subjects)
+    second_subject = SelectField('Second Subject', choices=subjects)
+    third_subject = SelectField('Third Subject', choices=subjects)
+
+    grades = [
+        ('a', 'A'),
+        ('b', 'B'),
+        ('c', 'C')
+    ]
+    first_grade = SelectField('Third Grade', choices=grades)
+    second_grade = SelectField('Second Grade', choices=grades)
+    third_grade = SelectField('Third Grade', choices=grades)
+
+    submit = SubmitField('Check', validators=[DataRequired()])
 
 class SignUpForm(FlaskForm):
     def check_date_of_birth(form, field):
