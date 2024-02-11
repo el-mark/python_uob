@@ -36,11 +36,12 @@ def cs_qualify(grades_raw):
 
     return render_template('cs_qualify.html', title='Qualification', qualification=qualification, grades=grades)
 
+
 @app.route('/cs_qualify_input', methods=['GET', 'POST'])
 def cs_qualify_input():
     form = QualifyFrom()
     if form.validate_on_submit():
-        grades = [form.search.first_grade, form.search.first_grade, form.search.third_grade]
+        grades = [form.first_grade.data, form.second_grade.data, form.third_grade.data]
 
         qualification = get_qualification(grades)
 

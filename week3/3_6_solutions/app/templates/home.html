@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}    
+    <h1>Check Events</h1>
+    
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.title_of_event.label }}<br/>{{ form.title_of_event }}<br/>
+            {% for error in form.title_of_event.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        
+        <br>
+        <div>{{ form.submit() }}</div>
+        <br>
+    </form>
+    
+    {% if events %}
+        {% for event in events %}
+            <h2>{{ event['title'] }}</h2>
+            <p>{{ event['date'] }}</p>
+            <p>{{ event['venue'] }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}
