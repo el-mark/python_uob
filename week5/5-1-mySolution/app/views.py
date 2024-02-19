@@ -15,3 +15,8 @@ def home():
 def template_a():
     variable_a = 'Variable A'
     return render_template('template_a.html', title='Template A', variable_a=variable_a, quotes=app.globals_quotes)
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
