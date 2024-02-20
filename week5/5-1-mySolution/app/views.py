@@ -1,5 +1,6 @@
 from app import app
-from flask import render_template
+from flask import render_template, redirect, url_for, flash
+from app.forms import RegistrationForm
 
 with app.open_resource('data/quotes.txt') as file:
     quotes = []
@@ -17,6 +18,10 @@ def template_a():
     return render_template('template_a.html', title='Template A', variable_a=variable_a, quotes=app.globals_quotes)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Registration for {form.username.data} successful', 'success')
+        return redirect(url_for('home'))
+    return render_template('register.html', title='Register', form=form)
