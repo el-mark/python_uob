@@ -35,16 +35,9 @@ def register():
             return redirect(url_for('index'))
         except:
             db.session.rollback()
-            if Student.query.filter_by(username=form.username.data).first():
-                form.username.errors.append('This username is already taken. Please choose another')
+            # if Student.query.filter_by(username=form.username.data).first():
+            #     form.username.errors.append('This username is already taken. Please choose another')
             if Student.query.filter_by(email=form.email.data).first():
                 form.email.errors.append('This email address is already registered. Please choose another')
 
-
-
-
-
-
-        flash(f'Registration for {form.username.data} successful', 'success')
-        return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
