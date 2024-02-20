@@ -8,11 +8,13 @@ from wtforms.validators import DataRequired, EqualTo
 # from wtforms.validators import DataRequired, EqualTo, Email
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    # username = StringField('Username', validators=[DataRequired()])
+    firstname = StringField('First Name')
+    lastname = StringField('Last Name', validators=[DataRequired()])
     # To enable email validation, comment out the following line and uncomment the next one:
     email = StringField('Email', validators=[DataRequired()])
-    # email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    
+    # password = PasswordField('Password', validators=[DataRequired()])
+    # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
