@@ -28,16 +28,17 @@ def register():
             email=form.email.data
         )
 
-        db.session.add(new_student)
-        try:
+        db.session.rollback()
+        # if Student.query.filter_by(username=form.username.data).first():
+        #     form.username.errors.append('This username is already taken. Please choose another')
+        if Student.query.filter_by(email=form.email.data).first():
+            form.email.errors.append('This email address is already registered. Please choose another')
+
+        if not form.email.errors:
+            db.session.add(new_student)
             db.session.commit()
-            flash(f'New Student added: {form.username.data} received', 'success')
-            return redirect(url_for('index'))
-        except:
-            db.session.rollback()
-            # if Student.query.filter_by(username=form.username.data).first():
-            #     form.username.errors.append('This username is already taken. Please choose another')
-            if Student.query.filter_by(email=form.email.data).first():
-                form.email.errors.append('This email address is already registered. Please choose another')
+            flash(f'New Student added: {form.email.data} received', 'success')
+            return redirect(url_for('home'))
 
     return render_template('register.html', title='Register', form=form)
+
