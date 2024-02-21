@@ -18,3 +18,8 @@ class RegistrationForm(FlaskForm):
     # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
+class BorrowForm(FlaskForm):
+    student_id = StringField('First Name', validators=[DataRequired()])
+    device_id = StringField('Last Name', validators=[DataRequired()])
+
+    submit = SubmitField('Register Borrow')

@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import RegistrationForm
-from app.models import Student
+from app.forms import RegistrationForm, BorrowForm
+from app.models import Student, Loan
 
 with app.open_resource('data/quotes.txt') as file:
     quotes = []
@@ -28,7 +28,6 @@ def register():
             email=form.email.data
         )
 
-        db.session.rollback()
         # if Student.query.filter_by(username=form.username.data).first():
         #     form.username.errors.append('This username is already taken. Please choose another')
         if Student.query.filter_by(email=form.email.data).first():
@@ -42,3 +41,29 @@ def register():
 
     return render_template('register.html', title='Register', form=form)
 
+@app.route('/borrow', methods=['GET', 'POST'])
+def borrow():
+    form = BorrowForm()
+    if form.validate_on_submit():
+
+        new_student = Student(
+            firstname=form.firstname.data, lastname=form.lastname.data,
+            email=form.email.data
+        )
+
+        if not Student.query.filter_by(student_id=form.student_id.data).first():
+            form.student_id.errors.append('This student is not registered')
+
+        if Loan.query.filter(Loan.student_id == form.student_id.data, Loan.borrow_datetime == None).first():
+            form.student_id.errors.append('This student has a borrowed item already')
+
+        if Loan.query.filter(Loan.device_id == form.device_id.data, Loan.borrow_datetime == None).first():
+            form.device_id.errors.append('This device has not been returned yet')
+
+        if not form.student_id.errors and not form.device_id.errors:
+            db.session.add(new_student)
+            db.session.commit()
+            flash(f'New Student added: {form.email.data} received', 'success')
+            return redirect(url_for('home'))
+
+    return render_template('borrow.html', title='Borrow', form=form)
