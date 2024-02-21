@@ -15,10 +15,10 @@ class Student(db.Model):
 class Loan(db.Model):
     __tablename__ = 'loans'
     loan_id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
     device_id = db.Column(db.Integer, nullable=False)
     borrow_datetime = db.Column(db.DateTime, nullable=False)
     return_datetime = db.Column(db.DateTime, nullable=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
 
     def __repr__(self):
         return f"loan('{self.device_id}', '{self.borrow_datetime}' , '{self.return_datetime}', '{self.student}')"

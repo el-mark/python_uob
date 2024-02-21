@@ -19,7 +19,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
 class BorrowForm(FlaskForm):
-    student_id = StringField('First Name', validators=[DataRequired()])
-    device_id = StringField('Last Name', validators=[DataRequired()])
+    student_id = StringField('Student Id', validators=[DataRequired()])
+    device_id = StringField('Device Id', validators=[DataRequired()])
 
     submit = SubmitField('Register Borrow')
