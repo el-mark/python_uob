@@ -1,8 +1,9 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import RegistrationForm, BorrowForm, ReturnDeviceForm
+from app.forms import RegistrationForm, BorrowForm, ReturnDeviceForm, DeleteStudentForm
 from app.models import Student, Loan
 from datetime import datetime
+from sqlalchemy import delete
 
 with app.open_resource('data/quotes.txt') as file:
     quotes = []
@@ -90,3 +91,28 @@ def return_device():
             return redirect(url_for('home'))
 
     return render_template('return_device.html', title='Return', form=form)
+
+@app.route('/delete_student', methods=['GET', 'POST'])
+def delete_student():
+    form = DeleteStudentForm()
+    if form.validate_on_submit():
+
+        student = Student.query.filter_by(student_id=form.student_id.data).first()
+        loans = Loan.query.filter_by(student_id=form.student_id.data)
+
+        if not student:
+            form.student_id.errors.append('The student does not exist')
+
+        if not form.student_id.errors:
+            # delete_statement = Loan.delete().where(Loan.c.student_id == form.student_id.data)
+            # db.session.execute(delete_statement)
+            # connection.close()
+
+            for loan in loans:
+                db.session.delete(loan)
+            db.session.delete(student)
+            db.session.commit()
+            flash(f'The student with id: {form.student_id.data} was deleted successfully', 'success')
+            return redirect(url_for('home'))
+
+    return render_template('delete_student.html', title='Return', form=form)

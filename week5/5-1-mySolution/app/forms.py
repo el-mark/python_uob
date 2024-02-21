@@ -28,4 +28,8 @@ class ReturnDeviceForm(FlaskForm):
     device_id = StringField('Device Id', validators=[DataRequired()])
 
     submit = SubmitField('Register Borrow')
-    
+
+class DeleteStudentForm(FlaskForm):
+    student_id = StringField('Student Id', validators=[DataRequired()])
+
+    submit = SubmitField('Delete')
