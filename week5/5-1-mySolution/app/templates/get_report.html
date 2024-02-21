@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Return device</h1>
+
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.object_id.label }}<br/>{{ form.object_id(size=30) }}<br/>
+            {% for error in form.object_id.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <br>
+        <div>{{ form.submit() }}</div>
+    </form>
+    <br>
+    {% if student %}
+        <h2>{{ student.lastname }}</h2>
+    {% endif %}
+
+{% endblock content %}

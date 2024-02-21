@@ -33,3 +33,8 @@ class DeleteStudentForm(FlaskForm):
     student_id = StringField('Student Id', validators=[DataRequired()])
 
     submit = SubmitField('Delete')
+
+class GetReportForm(FlaskForm):
+    object_id = StringField('Id for search', validators=[DataRequired()])
+
+    submit = SubmitField('Search')

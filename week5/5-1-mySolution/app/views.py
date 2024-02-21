@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import RegistrationForm, BorrowForm, ReturnDeviceForm, DeleteStudentForm
+from app.forms import RegistrationForm, BorrowForm, ReturnDeviceForm, DeleteStudentForm, GetReportForm
 from app.models import Student, Loan
 from datetime import datetime
 from sqlalchemy import delete
@@ -14,11 +14,6 @@ with app.open_resource('data/quotes.txt') as file:
 @app.route('/')
 def home():
     return render_template('home.html')
-
-@app.route('/template_a')
-def template_a():
-    variable_a = 'Variable A'
-    return render_template('template_a.html', title='Template A', variable_a=variable_a, quotes=app.globals_quotes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -116,3 +111,22 @@ def delete_student():
             return redirect(url_for('home'))
 
     return render_template('delete_student.html', title='Return', form=form)
+
+@app.route('/get_report', methods=['GET', 'POST'])
+def get_report():
+    form = GetReportForm()
+    student = None
+    loans = None
+    if form.validate_on_submit():
+
+        student = Student.query.filter_by(student_id=form.object_id.data).first()
+        # loans = Loan.query.filter_by(student_id=form.student_id.data)
+
+        if not student:
+            form.object_id.errors.append('The student does not exist')
+
+        if not form.object_id.errors:
+            loans = student.loans
+
+
+    return render_template('get_report.html', title='Query Database', form=form, student=student, loans=loans)
