@@ -23,3 +23,9 @@ class BorrowForm(FlaskForm):
     device_id = StringField('Device Id', validators=[DataRequired()])
 
     submit = SubmitField('Register Borrow')
+
+class ReturnDeviceForm(FlaskForm):
+    device_id = StringField('Device Id', validators=[DataRequired()])
+
+    submit = SubmitField('Register Borrow')
+    

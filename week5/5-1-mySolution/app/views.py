@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import RegistrationForm, BorrowForm
+from app.forms import RegistrationForm, BorrowForm, ReturnDeviceForm
 from app.models import Student, Loan
 from datetime import datetime
 
@@ -64,7 +64,29 @@ def borrow():
         if not form.student_id.errors and not form.device_id.errors:
             db.session.add(new_loan)
             db.session.commit()
-            flash(f'New Loan added for student_id: {form.student_id.data}', 'success')
+            flash(f'New Loan added for student with id: {form.student_id.data}', 'success')
             return redirect(url_for('home'))
 
     return render_template('borrow.html', title='Borrow', form=form)
+
+@app.route('/return_device', methods=['GET', 'POST'])
+def return_device():
+    form = ReturnDeviceForm()
+    if form.validate_on_submit():
+
+        loan = Loan.query.filter(
+            Loan.device_id == form.device_id.data, Loan.return_datetime == None
+        ).first()
+
+        if not Loan.query.filter_by(device_id=form.device_id.data).first():
+            form.device_id.errors.append('The device does not exist')
+        elif not loan:
+            form.device_id.errors.append('The device is already returned')
+
+        if not form.device_id.errors:
+            loan.return_datetime = datetime.now()
+            db.session.commit()
+            flash(f'The device with id: {form.device_id.data} was returned successfully', 'success')
+            return redirect(url_for('home'))
+
+    return render_template('return_device.html', title='Return', form=form)
