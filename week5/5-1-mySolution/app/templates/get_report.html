@@ -5,6 +5,12 @@
     <form method="POST" action="" novalidate>
         {{ form.hidden_tag() }}
         <div>
+            {{ form.object_class.label }}<br/>{{ form.object_class }}<br/>
+            {% for error in form.object_class.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
             {{ form.object_id.label }}<br/>{{ form.object_id(size=30) }}<br/>
             {% for error in form.object_id.errors %}
                 <span style="color: red;">[{{ error }}]</span>

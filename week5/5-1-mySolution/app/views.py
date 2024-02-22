@@ -120,14 +120,18 @@ def get_report():
 
     if form.validate_on_submit():
 
-        student = Student.query.filter_by(student_id=form.object_id.data).first()
-        # loans = Loan.query.filter_by(student_id=form.student_id.data)
+        if form.object_class.data == 'student':
+            student = Student.query.filter_by(student_id=form.object_id.data).first()
 
-        if not student:
-            form.object_id.errors.append('The student does not exist')
+            if not student:
+                form.object_id.errors.append('The student does not exist')
 
-        if not form.object_id.errors:
-            loans = student.loans
+            if not form.object_id.errors:
+                loans = student.loans
+        else:
+            loans = Loan.query.filter_by(device_id=form.object_id.data)
 
+            if not loans.first():
+                form.object_id.errors.append('There are no loans for that device yet')
 
     return render_template('get_report.html', title='Query Database', form=form, student=student, loans=loans)

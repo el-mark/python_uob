@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 # To enable email validation,
 # 1. install the email-validation package in your py312 environment,
 # 2. Comment out the following import line and uncomment the next one
@@ -36,5 +36,10 @@ class DeleteStudentForm(FlaskForm):
 
 class GetReportForm(FlaskForm):
     object_id = StringField('Id for search', validators=[DataRequired()])
+    object_classes = [
+        ('student', 'Student'),
+        ('device', 'Device')
+    ]
+    object_class = SelectField('Choose one', choices=object_classes)
 
     submit = SubmitField('Search')
