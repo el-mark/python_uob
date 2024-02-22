@@ -14,8 +14,11 @@
         <div>{{ form.submit() }}</div>
     </form>
     <br>
-    {% if student %}
-        <h2>{{ student.lastname }}</h2>
-    {% endif %}
+    <h2>Loans {% if student %} of {{ student.lastname }} {% endif %}</h2>
+    <ul>
+        {% for loan in loans %}
+            <li>{{ loan }}</li>
+        {% endfor %}
+    </ul>
 
 {% endblock content %}

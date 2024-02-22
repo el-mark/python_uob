@@ -10,7 +10,7 @@ class Student(db.Model):
     loans = db.relationship('Loan', backref='student', lazy='dynamic')
 
     def __repr__(self):
-        return f"student('{self.lastname}', '{self.firstname}' , '{self.email}')"
+        return f"student('{self.student_id}', '{self.lastname}', '{self.firstname}' , '{self.email}')"
 
 class Loan(db.Model):
     __tablename__ = 'loans'

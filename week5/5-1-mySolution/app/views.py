@@ -116,7 +116,8 @@ def delete_student():
 def get_report():
     form = GetReportForm()
     student = None
-    loans = None
+    loans = Loan.query.all()
+
     if form.validate_on_submit():
 
         student = Student.query.filter_by(student_id=form.object_id.data).first()
