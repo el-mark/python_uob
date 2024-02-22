@@ -32,6 +32,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Returned</th>
+                <th scope="col">Device</th>
                 <th scope="col">S#</th>
                 <th scope="col">First</th>
                 <th scope="col">Last</th>
@@ -43,6 +44,7 @@
                 <tr>
                     <th scope="row">{{ loan.loan_id }}</th>
                     <th>{{ loan.return_datetime }}</th>
+                    <td>{{ loan.device_id }}</td>
                     <td>{{ loan.student.student_id }}</td>
                     <td>{{ loan.student.firstname }}</td>
                     <td>{{ loan.student.lastname }}</td>
