@@ -7,7 +7,7 @@ class Student(db.Model):
     firstname = db.Column(db.String(32))
     lastname = db.Column(db.String(32), nullable=False, index=True)
     email = db.Column(db.String(64), nullable=False, unique=True, index=True)
-    loans = db.relationship('Loan', backref='student', lazy='dynamic')
+    loans = db.relationship('Loan', backref='student', lazy='dynamic', cascade='all, delete')
 
     def __repr__(self):
         return f"student('{self.student_id}', '{self.lastname}', '{self.firstname}' , '{self.email}')"
