@@ -3,9 +3,10 @@ from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm
 from app.models import Student, Loan
-from app.variable_a import VariableA
-from app.calculator import addition, subtraction
-from app.calculator.multiplication import mul
+# from app.variable_a import VariableA
+# from app.calculator import addition, subtraction
+# from app.calculator.multiplication import mul
+import app.variable_a
 
 
 @app.route('/')
@@ -13,6 +14,7 @@ from app.calculator.multiplication import mul
 def index():
     variable_number = addition.add(1,1) + subtraction.sub(3,6)
     multiplication_1 = mul(3,4)
+    valure_variable_b = variable_b()
     return render_template('index.html', variable_a=VariableA.value, variable_number=variable_number, multiplication_1=multiplication_1)
 
 @app.route('/datetime')
