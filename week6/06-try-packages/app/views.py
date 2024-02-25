@@ -3,10 +3,10 @@ from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm
 from app.models import Student, Loan
-# from app.variable_a import VariableA
-# from app.calculator import addition, subtraction
-# from app.calculator.multiplication import mul
-import app.variable_a
+from app.variable_a import VariableA, variable_b
+from app.calculator import addition, subtraction
+from app.calculator.multiplication import mul
+# import app.variable_a
 
 
 @app.route('/')

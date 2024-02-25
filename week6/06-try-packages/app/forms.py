@@ -23,6 +23,7 @@ class AddStudentForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     firstname = StringField('Firstname')
     lastname = StringField('Lastname', validators=[DataRequired()])
+    age = IntegerField('Age')
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Add Student')
 

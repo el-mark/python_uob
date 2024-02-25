@@ -27,6 +27,12 @@
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     </div>
+    <div>
+        {{ form.age.label }}<br/>{{ form.age(size=30) }}<br/>
+        {% for error in form.age.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
     <div>{{ form.submit() }}</div>
 </form>
 {% endblock %}
