@@ -45,8 +45,10 @@ def register():
 def add_student():
     form = AddStudentForm()
     if form.validate_on_submit():
-        new_student = Student(username=form.username.data, firstname=form.firstname.data,
-                              lastname=form.lastname.data, email=form.email.data)
+        new_student = Student(
+            username=form.username.data, firstname=form.firstname.data,                  
+            lastname=form.lastname.data, email=form.email.data, age=form.age.data
+        )
         db.session.add(new_student)
         try:
             db.session.commit()
