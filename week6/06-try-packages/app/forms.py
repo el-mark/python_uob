@@ -33,7 +33,7 @@ class AddStudentForm(FlaskForm):
 
     def validate_email(self, email):
         if Student.query.filter_by(email=email.data).first():
-            raise ValidationError('This email address is already registered. Please choose another')
+            raise ValidationError('This email address is already registered. Please choose another or it wont work')
 
 
 class BorrowForm(FlaskForm):
