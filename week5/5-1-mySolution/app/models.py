@@ -10,7 +10,7 @@ class Student(db.Model):
     # CASCADE ALL
     loans = db.relationship('Loan', backref='student', lazy='dynamic', cascade='all, delete')
     # ON DELETE SET NULL
-    loans = db.relationship('Loan', backref='student', lazy='dynamic')
+    # loans = db.relationship('Loan', backref='student', lazy='dynamic')
 
     def __repr__(self):
         return f"student('{self.student_id}', '{self.lastname}', '{self.firstname}' , '{self.email}')"
