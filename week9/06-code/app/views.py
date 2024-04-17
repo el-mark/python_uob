@@ -1,9 +1,9 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm
 from app.models import Student, Loan, User
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 
 @app.route('/')
@@ -29,7 +29,11 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         flash(f'Login for {form.username.data}', 'success')
-        return redirect(url_for('index'))
+
+        next_page = request.args.get('next')
+        if not next_page:
+            next_page = url_for('index')
+        return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
 # @app.route('/login', methods=['GET', 'POST'])
@@ -40,6 +44,10 @@ def login():
 #         return redirect(url_for('index'))
 #     return render_template('login.html', title='Sign In', form=form)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -51,6 +59,7 @@ def register():
 
 
 @app.route('/add_student', methods=['GET', 'POST'])
+@login_required
 def add_student():
     form = AddStudentForm()
     if form.validate_on_submit():
