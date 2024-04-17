@@ -15,6 +15,12 @@
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     </div>
+    <div>
+        {{ form.remember_me.label }}<br/>{{ form.remember_me() }}<br/>
+        {% for error in form.remember_me.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
     <div>{{ form.submit() }}</div>
 </form>
 {% endblock %}

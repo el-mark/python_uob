@@ -48,8 +48,9 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        new_user = User(username=form.username.data, email=form.email.data,
-                        password_hash=generate_password_hash(form.password.data, salt_length=32))
+        new_user = User(
+            username=form.username.data, email=form.email.data,password_hash=generate_password_hash(form.password.data, salt_length=32)
+        )
         db.session.add(new_user)
         try:
             db.session.commit()

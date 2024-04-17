@@ -2,7 +2,8 @@ from flask import render_template, redirect, url_for, flash
 from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm
-from app.models import Student, Loan
+from app.models import Student, Loan, User
+from flask_login import current_user, login_user
 
 
 @app.route('/')
@@ -16,14 +17,28 @@ def date_time():
     now = datetime.now()
     return render_template('datetime.html', title='Date & Time', now=now)
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
         flash(f'Login for {form.username.data}', 'success')
         return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         flash(f'Login for {form.username.data}', 'success')
+#         return redirect(url_for('index'))
+#     return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])

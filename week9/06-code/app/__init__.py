@@ -19,8 +19,4 @@ from app.models import *
 
 @app.shell_context_processor
 def make_shell_context():
-    dict = dict(
-        db=db, Student=Student, Loan=Loan, datetime=datetime,
-        LoginManager=LoginManager
-    )
-    return dict
+    return dict(db=db, Student=Student, Loan=Loan, datetime=datetime,LoginManager=LoginManager)
