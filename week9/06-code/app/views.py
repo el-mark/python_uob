@@ -80,6 +80,7 @@ def add_student():
 
 
 @app.route('/borrow', methods=['GET', 'POST'])
+@login_required
 def borrow():
     form = BorrowForm()
     if form.validate_on_submit():

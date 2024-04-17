@@ -36,7 +36,7 @@
                             Register
                         </a>
                     {% else %}
-                        <a class="nav-item nav-link" href="{{ url_for('login') }}">
+                        <a class="nav-item nav-link" href="{{ url_for('logout') }}">
                             Logout {{ current_user.username }}
                         </a>
                     {% endif %}
