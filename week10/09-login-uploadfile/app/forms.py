@@ -1,9 +1,15 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 from app.models import Student, Loan
 from sqlalchemy import and_
 
+class UploadStudentsForm(FlaskForm):
+    student_file = FileField(
+        'New Students File',
+        validators = [FileAllowed(['csv'])]
+    )
+    submit = SubmitField('Upload')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

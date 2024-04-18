@@ -13,7 +13,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data', 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'data', 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
 from app import views
 from app.models import *
