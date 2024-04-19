@@ -155,8 +155,8 @@ def upload_students():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             form.student_file.data.save(filepath)
             try:
-                with open(filepath, newline='') as csvfile:
-                    reader = csv.reader(csvfile)
+                with open(filepath, newline='') as csv_file:
+                    reader = csv.reader(csv_file)
                     error_count = 0
                     row = next(reader)
                     if row != ['Username', 'Email', 'Firstname', 'Lastname']:
@@ -191,6 +191,12 @@ def upload_students():
                                 username=row[0], email=row[1], firstname=row[2], lastname=row[3]
                             )
                             db.session.add(student)
+                if error_count > 0:
+                    raise ValueError
+                db.session.commit()
+                flash(f'New Students Uploaded', 'success')
+
+                return redirect(url_for('index'))
             except:
                 flash(f'New students upload failed: please try again', 'danger')
                 db.session.rollback()
