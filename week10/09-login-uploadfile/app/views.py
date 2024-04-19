@@ -1,16 +1,22 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
+from uuid import uuid4
+from werkzeug.utils import secure_filename
+import os
+import csv
+from email_validator import validate_email, EmailNotValidError
+from werkzeug.security import generate_password_hash
+
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
-
 
 @app.route('/datetime')
 def date_time():
@@ -48,13 +54,36 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     form = RegistrationForm()
+#     if form.validate_on_submit():
+#         flash(f'Registration for {form.username.data} received', 'success')
+#         return redirect(url_for('index'))
+#     return render_template('registration.html', title='Register', form=form)
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Registration for {form.username.data} received', 'success')
-        return redirect(url_for('index'))
+        new_user = User(
+            username=form.username.data, email=form.email.data,password_hash=generate_password_hash(form.password.data, salt_length=32)
+        )
+        db.session.add(new_user)
+        try:
+            db.session.commit()
+            flash(f'Registration for {form.username.data} received', 'success')
+            return redirect(url_for('index'))
+        except:
+            db.session.rollback()
+            if User.query.filter_by(username=form.username.data):
+                form.username.errors.append('This username is already taken. Please choose another')
+            if User.query.filter_by(email=form.email.data):
+                form.email.errors.append('This email address is already registered. Please choose another')
+            flash(f'Registration failed', 'danger')
     return render_template('registration.html', title='Register', form=form)
+
 
 
 @app.route('/add_student', methods=['GET', 'POST'])
@@ -115,4 +144,82 @@ def deactivateStudent():
             db.session.rollback()
     return render_template('deactivateStudent.html', title='Deactivate Student', form=form)
 
+@app.route('/upload_students', methods=['GET', 'POST'])
+@login_required
+def upload_students():
+    form = UploadStudentsForm()
+    if form.validate_on_submit():
+        if form.student_file.data:
+            unique_str = str(uuid4())
+            filename = secure_filename(f'{unique_str}-{form.student_file.data.filename}')
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            form.student_file.data.save(filepath)
+            try:
+                with open(filepath, newline='') as csvfile:
+                    reader = csv.reader(csvfile)
+                    error_count = 0
+                    row = next(reader)
+                    if row != ['Username', 'Email', 'Firstname', 'Lastname']:
+                        form.student_file.errors.append(
+                            'First row of file must be a Header row containing Username, ...'
+                        )
+                        raise ValueError()
+                    for idx, row in enumerate(reader):
+                        #spreadsheeet have the first row as 0, and we skep the header row
+                        row_num = idx + 2
+                        if error_count > 10:
+                            form.student_file.errors.append('Too many error found')
+                            raise ValueError()
+                        if len(row) != 4:
+                            form.student_file.errors.append(f'Row {row_num} doesn\'t have 4 columns')
+                            error_count += 1
+                        if Student.query.filter_by(username=row[0]).first():
+                            form.student_file.errors.append(
+                                f'Row {row_num} has username {row[0]}, which is already in use'
+                            )
+                            error_count += 1
+                        if not is_valid_email(row[1]):
+                            form.student_file.errors.append(f'Row {row_num} has bad email format')
+                            error_count += 1
+                        if Student.query.filter_by(email=row[1]).first():
+                            form.student_file.errors.append(
+                                f'Row {row_num} has email {row[1]}, which is already in user'
+                            )
+                            error_count += 1
+                        if error_count == 0:
+                            student = Student(
+                                username=row[0], email=row[1], firstname=row[2], lastname=row[3]
+                            )
+                            db.session.add(student)
+            except:
+                flash(f'New students upload failed: please try again', 'danger')
+                db.session.rollback()
+            finally:
+                silent_remove(filepath)
+    return render_template('upload_students.html', title='Uploads Students', form=form)
 
+def is_valid_email(email):
+    try:
+        validate_email(email, check_deliverability=False)
+    except EmailNotValidError as error:
+        return False
+    return True
+
+def silent_remove(filepath):
+    try:
+        os.remove(filepath)
+    except:
+        pass
+    return
+
+@app.errorhandler(413)
+def error_413(error):
+    return render_template('errors/413.html'), 413
+
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(403)
+def error_403(error):
+    return render_template('errors/403.html'), 403
