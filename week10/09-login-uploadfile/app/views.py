@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -23,11 +23,25 @@ def date_time():
     now = datetime.now()
     return render_template('datetime.html', title='Date & Time', now=now)
 
-@app.route('/listStudents')
+# @app.route('/listStudents')
+# @login_required
+# def listStudents():
+#     students = Student.query.all()
+#     return render_template('listStudents.html', title='List Students', students=students)
+
+@app.route('/listStudents', methods=['GET', 'POST'])
 @login_required
 def listStudents():
+    form = ToggleActiveForm()
     students = Student.query.all()
-    return render_template('listStudents.html', title='List Students', students=students)
+    if form.validate_on_submit():
+        toggleActive = request.values.get('toggleActive')
+        if toggleActive:
+            student = Student.query.get(toggleActive)
+            student.active = not student.active
+            db.session.commit()
+        return redirect(url_for('listStudents'))
+    return render_template('listStudents.html', title='List Students', students=students, form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])

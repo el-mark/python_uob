@@ -87,3 +87,5 @@ class DeactivateStudentForm(FlaskForm):
         if not student.active:
             raise ValidationError('This student has already been deactivated')
 
+class ToggleActiveForm(FlaskForm):
+    submit = SubmitField('Toggle Active')
