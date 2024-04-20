@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm, ToggleDamagedForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm, ToggleDamagedForm, SearchStudentForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -51,6 +51,17 @@ def listStudents():
         return redirect(url_for('listStudents'))
     return render_template('listStudents.html', title='List Students', students=students, form=form)
 
+@app.route('/search_student', methods=['GET', 'POST'])
+@login_required
+def search_student():
+    form = SearchStudentForm()
+    if form.validate_on_submit():
+        # students = Student.query.filter_by(lastname=form.lastname.data)
+        students = Student.query.filter(Student.lastname.contains(form.lastname.data))
+    else:
+        students = Student.query.all()
+
+    return render_template('search_student.html', title='List Students', students=students, form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

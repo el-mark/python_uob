@@ -99,3 +99,7 @@ class ToggleActiveForm(FlaskForm):
 
 class ToggleDamagedForm(FlaskForm):
     submit = SubmitField('Toggle Damaged')
+
+class SearchStudentForm(FlaskForm):
+    lastname = StringField('Search lastname', validators=[DataRequired()])
+    submit = SubmitField('Search')

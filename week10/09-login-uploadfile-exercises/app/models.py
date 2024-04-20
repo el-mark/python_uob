@@ -53,4 +53,3 @@ class Loan(db.Model):
     def __repr__(self):
         return f"loan(loan_id='{self.loan_id}', device_id='{self.device_id}', borrowdatetime='{self.borrowdatetime}' , returndatetime='{self.returndatetime}', '{self.student}')"
 
-
