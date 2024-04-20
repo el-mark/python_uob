@@ -23,11 +23,11 @@ def date_time():
     now = datetime.now()
     return render_template('datetime.html', title='Date & Time', now=now)
 
-# @app.route('/listStudents')
-# @login_required
-# def listStudents():
-#     students = Student.query.all()
-#     return render_template('listStudents.html', title='List Students', students=students)
+@app.route('/loan_list')
+@login_required
+def loan_list():
+    loans = Loan.query.all()
+    return render_template('loan_list.html', title='Loan List', loans=loans)
 
 @app.route('/listStudents', methods=['GET', 'POST'])
 @login_required
