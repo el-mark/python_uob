@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -197,7 +197,7 @@ def upload_students():
                             error_count += 1
                         if Student.query.filter_by(email=row[1]).first():
                             form.student_file.errors.append(
-                                f'Row {row_num} has email {row[1]}, which is already in user'
+                                f'Row {row_num} has email {row[1]}, which is already in use'
                             )
                             error_count += 1
                         if error_count == 0:
@@ -231,6 +231,67 @@ def silent_remove(filepath):
     except:
         pass
     return
+
+@app.route('/upload_users', methods=['GET', 'POST'])
+@login_required
+def upload_users():
+    form = UploadUsersForm()
+    if form.validate_on_submit():
+        if form.user_file.data:
+            unique_str = str(uuid4())
+            filename = secure_filename(f'{unique_str}-{form.user_file.data.filename}')
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            form.user_file.data.save(filepath)
+            try:
+                with open(filepath, newline='') as csv_file:
+                    reader = csv.reader(csv_file)
+                    error_count = 0
+                    row = next(reader)
+                    if row != ['Username', 'Email', 'Password']:
+                        form.user_file.errors.append(
+                            'First row of file must be a Header row containing Username, Email, Password'
+                        )
+                        raise ValueError()
+                    for idx, row in enumerate(reader):
+                        #spreadsheeet have the first row as 0, and we skep the header row
+                        row_num = idx + 2
+                        if error_count > 10:
+                            form.user_file.errors.append('Too many error found')
+                            raise ValueError()
+                        if len(row) != 3:
+                            form.user_file.errors.append(f'Row {row_num} doesn\'t have 3 columns')
+                            error_count += 1
+                        if User.query.filter_by(username=row[0]).first():
+                            form.user_file.errors.append(
+                                f'Row {row_num} has username {row[0]}, which is already in use'
+                            )
+                            error_count += 1
+                        if not is_valid_email(row[1]):
+                            form.user_file.errors.append(f'Row {row_num} has bad email format')
+                            error_count += 1
+                        if User.query.filter_by(email=row[1]).first():
+                            form.user_file.errors.append(
+                                f'Row {row_num} has email {row[1]}, which is already in use'
+                            )
+                            error_count += 1
+                        if error_count == 0:
+                            password_hash = generate_password_hash(row[2], salt_length=32)
+                            user = User(
+                                username=row[0], email=row[1], password_hash=password_hash
+                            )
+                            db.session.add(user)
+                if error_count > 0:
+                    raise ValueError
+                db.session.commit()
+                flash(f'New User Uploaded', 'success')
+
+                return redirect(url_for('index'))
+            except:
+                flash(f'New User upload failed: please try again', 'danger')
+                db.session.rollback()
+            finally:
+                silent_remove(filepath)
+    return render_template('upload_users.html', title='Uploads User', form=form)
 
 @app.errorhandler(413)
 def error_413(error):

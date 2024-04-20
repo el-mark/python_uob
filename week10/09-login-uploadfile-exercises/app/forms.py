@@ -12,6 +12,13 @@ class UploadStudentsForm(FlaskForm):
     )
     submit = SubmitField('Upload')
 
+class UploadUsersForm(FlaskForm):
+    user_file = FileField(
+        'New Users File',
+        validators = [FileAllowed(['csv'])]
+    )
+    submit = SubmitField('Upload')
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
