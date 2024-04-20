@@ -8,4 +8,13 @@ All util week 9. Plus:
 
 5. toggle damage property on loans list
 6. search feature on students list
-7. search info maintains after toggle
+
+
+# create first User (flask shell)(python)
+from werkzeug.security import generate_password_hash
+new_user = User(
+    username='mark', email='m@g.com',password_hash=generate_password_hash('123', salt_length=32)
+)
+
+db.session.add(new_user)
+db.session.commit()

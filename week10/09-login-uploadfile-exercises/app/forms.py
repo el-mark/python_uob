@@ -96,3 +96,6 @@ class DeactivateStudentForm(FlaskForm):
 
 class ToggleActiveForm(FlaskForm):
     submit = SubmitField('Toggle Active')
+
+class ToggleDamagedForm(FlaskForm):
+    submit = SubmitField('Toggle Damaged')

@@ -2,37 +2,47 @@
 
 {% block content %}
     <div class="container m-3">
-        <table id="data" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Loan Id</th>
-                    <th>Device Id</th>
-                    <th>Borrow date time</th>
-                    <th>Return date time</th>
-                    <th>Student ID</th>
-                    <th>Student username</th>
-                    <th>Student last name</th>
-                    <th>Student first name</th>
-                    <th>Student email</th>
-                    <th>Student active</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for loan in loans %}
+        <form method="POST" action="" novalidate>
+            {{ form.hidden_tag() }}
+            <table id="data" class="table table-striped">
+                <thead>
                     <tr>
-                        <td>{{loan.loan_id}}</td>
-                        <td>{{loan.device_id}}</td>
-                        <td>{{loan.borrowdatetime}}</td>
-                        <td>{{loan.returndatetime}}</td>
-                        <td>{{loan.student.student_id}}</td>
-                        <td>{{loan.student.username}}</td>
-                        <td>{{loan.student.lastname}}</td>
-                        <td>{{loan.student.firstname}}</td>
-                        <td>{{loan.student.email}}</td>
-                        <td>{{loan.student.active}}</td>
+                        <th>Loan Id</th>
+                        <th>Device Id</th>
+                        <th>Borrow date time</th>
+                        <th>Return date time</th>
+                        <th>Damaged</th>
+                        <th>Student ID</th>
+                        <th>Student username</th>
+                        <th>Student last name</th>
+                        <th>Student first name</th>
+                        <th>Student email</th>
+                        <th>Student active</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                        <tr>
+                            <td>{{loan.loan_id}}</td>
+                            <td>{{loan.device_id}}</td>
+                            <td>{{loan.borrowdatetime}}</td>
+                            <td>{{loan.returndatetime}}</td>
+                            <td>{{loan.damaged}}</td>
+                            <td>
+                                <button type="submit" name="toggleDamaged" value="{{loan.loan_id}}">
+                                    Toggle Damaged
+                                </button>
+                            </td>
+                            <td>{{loan.student.student_id}}</td>
+                            <td>{{loan.student.username}}</td>
+                            <td>{{loan.student.lastname}}</td>
+                            <td>{{loan.student.firstname}}</td>
+                            <td>{{loan.student.email}}</td>
+                            <td>{{loan.student.active}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
     </div>
 {% endblock %}

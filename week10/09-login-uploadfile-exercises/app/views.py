@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm, ToggleDamagedForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -23,11 +23,19 @@ def date_time():
     now = datetime.now()
     return render_template('datetime.html', title='Date & Time', now=now)
 
-@app.route('/loan_list')
+@app.route('/loan_list', methods=['GET', 'POST'])
 @login_required
 def loan_list():
+    form = ToggleDamagedForm()
     loans = Loan.query.all()
-    return render_template('loan_list.html', title='Loan List', loans=loans)
+    if form.validate_on_submit():
+        toggleDamaged = request.values.get('toggleDamaged')
+        if toggleDamaged:
+            loan = Loan.query.get(toggleDamaged)
+            loan.damaged = not loan.damaged
+            db.session.commit()
+        return redirect(url_for('loan_list'))
+    return render_template('loan_list.html', title='Loan List', loans=loans, form=form)
 
 @app.route('/listStudents', methods=['GET', 'POST'])
 @login_required
