@@ -103,3 +103,7 @@ class ToggleDamagedForm(FlaskForm):
 class SearchStudentForm(FlaskForm):
     lastname = StringField('Search lastname', validators=[DataRequired()])
     submit = SubmitField('Search')
+
+class SearchStudentToggleForm(FlaskForm):
+    lastname = StringField('Search lastname', validators=[DataRequired()])
+    submit = SubmitField('Search')

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm, ToggleDamagedForm, SearchStudentForm
+from app.forms import LoginForm, RegistrationForm, AddStudentForm, BorrowForm, DeactivateStudentForm, UploadStudentsForm, ToggleActiveForm, UploadUsersForm, ToggleDamagedForm, SearchStudentForm, SearchStudentToggleForm
 from app.models import Student, Loan, User
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -66,14 +66,30 @@ def search_student():
 @app.route('/search_and_toggle_student', methods=['GET', 'POST'])
 @login_required
 def search_and_toggle_student():
-    form = SearchStudentForm()
+    form = SearchStudentToggleForm()
+    form_2 = ToggleActiveForm()
+    search = request.args.get('search')
+
     if form.validate_on_submit():
         # students = Student.query.filter_by(lastname=form.lastname.data)
         students = Student.query.filter(Student.lastname.contains(form.lastname.data))
+        search = form.lastname.data
     else:
-        students = Student.query.all()
+        if search:
+            students = Student.query.filter(Student.lastname.contains(search))
+        else:
+            students = Student.query.all()
 
-    return render_template('search_and_toggle_student.html', title='Search and toggle Students', students=students, form=form)
+        if form_2.validate_on_submit():
+            toggleActive = request.values.get('toggleActive')
+            if toggleActive:
+                student = Student.query.get(toggleActive)
+                student.active = not student.active
+                db.session.commit()
+            return redirect(url_for('search_and_toggle_student', search=search))
+
+    return render_template('search_and_toggle_student.html', title='Search and toggle Students', students=students, form=form, action=url_for('search_and_toggle_student', search=search))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
