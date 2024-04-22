@@ -62,7 +62,7 @@ class BorrowForm(FlaskForm):
         if not (student):
             raise ValidationError('There is no student with this id in the system')
         if not student.active:
-            raise ValidationError('This student has been dactivated and cannot borrow devices')
+            raise ValidationError('This student has been deactivated and cannot borrow devices')
         if Loan.query.filter(
                     (Loan.student_id == student_id.data)
                     &
