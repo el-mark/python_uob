@@ -63,6 +63,18 @@ def search_student():
 
     return render_template('search_student.html', title='List Students', students=students, form=form)
 
+@app.route('/search_and_toggle_student', methods=['GET', 'POST'])
+@login_required
+def search_and_toggle_student():
+    form = SearchStudentForm()
+    if form.validate_on_submit():
+        # students = Student.query.filter_by(lastname=form.lastname.data)
+        students = Student.query.filter(Student.lastname.contains(form.lastname.data))
+    else:
+        students = Student.query.all()
+
+    return render_template('search_and_toggle_student.html', title='Search and toggle Students', students=students, form=form)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
